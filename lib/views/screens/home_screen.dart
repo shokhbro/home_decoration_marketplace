@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:home_decoration_marketplace/views/screens/products_data_screen.dart';
 import 'package:home_decoration_marketplace/views/widgets/carouselslider_widget.dart';
 import 'package:home_decoration_marketplace/views/widgets/catalog_container_widget.dart';
 
@@ -18,11 +19,105 @@ class _HomeScreenState extends State<HomeScreen> {
     "For you",
   ];
   int selectedIndex = 0;
-
+  List<bool> isFavorite = List.generate(10, (_) => false);
+  List<Map> products = [
+    {
+      "image": "assets/images/lamp.png",
+      "title": "Table Desk Lamp",
+      "subtitle": "Lamp",
+      "price": "\$143.00",
+      "rating": "4.2",
+    },
+    {
+      "image": "assets/images/lamp_shades.png",
+      "title": "Table Desk Lamp",
+      "subtitle": "Lamp",
+      "price": "\$143.00",
+      "rating": "4.2",
+    },
+    {
+      "image": "assets/images/decorative_plants.png",
+      "title": "Decorative Plants",
+      "subtitle": "Paint",
+      "price": "\$143.00",
+      "rating": "4.2",
+    },
+    {
+      "image": "assets/images/painting_berry.png",
+      "title": "Painting Berry Plants",
+      "subtitle": "Paint",
+      "price": "\$143.00",
+      "rating": "4.2",
+    },
+    {
+      "image": "assets/images/painting_berry.png",
+      "title": "Painting Berry Plants",
+      "subtitle": "Paint",
+      "price": "\$143.00",
+      "rating": "4.2",
+    },
+    {
+      "image": "assets/images/painting_berry.png",
+      "title": "Painting Berry Plants",
+      "subtitle": "Paint",
+      "price": "\$143.00",
+      "rating": "4.2",
+    },
+  ];
   void onCatalogTap(int index) {
     setState(() {
       selectedIndex = index;
     });
+  }
+
+  double getImageHeight(int index) {
+    if (index == 3) {
+      return 100;
+    } else if (index == 1) {
+      return 130;
+    } else if (index == 2) {
+      return 110;
+    } else if (index == 0) {
+      return 145;
+    } else if (index == 4) {
+      return 100;
+    } else if (index == 5) {
+      return 100;
+    }
+
+    return 140;
+  }
+
+  double getPositionTop(int index) {
+    if (index == 2) {
+      return -60;
+    } else if (index == 3) {
+      return -50;
+    } else if (index == 1) {
+      return -70;
+    } else if (index == 0) {
+      return -70;
+    } else if (index == 4) {
+      return -50;
+    } else if (index == 5) {
+      return -50;
+    }
+    return -60;
+  }
+
+  double getPositionLeft(int index) {
+    if (index == 2) {
+      return -10;
+    } else if (index == 3) {
+      return -30;
+    } else if (index == 1) {
+      return -30;
+    } else if (index == 4) {
+      return -30;
+    } else if (index == 5) {
+      return -30;
+    }
+    return -40;
   }
 
   @override
@@ -69,70 +164,98 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const Gap(30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Have 24 products",
-                style: TextStyle(
-                  fontFamily: 'Lato',
-                  fontSize: 17,
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Have ${products.length} products",
+                  style: const TextStyle(
+                    fontFamily: 'Lato',
+                    fontSize: 17,
+                  ),
                 ),
-              ),
-              Container(
-                width: 100,
-                height: 35,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      "Sort by",
-                      style: TextStyle(
+                Container(
+                  width: 100,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: DropdownButton<String>(
+                      alignment: Alignment.bottomRight,
+                      value: 'Sort by',
+                      icon: const Icon(Icons.arrow_drop_down,
+                          color: Colors.black45),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: const TextStyle(
                         fontFamily: 'Lato',
                         fontSize: 14,
-                        color: Colors.black26,
+                        color: Colors.black,
                       ),
+                      underline: Container(
+                        height: 0,
+                        color: Colors.transparent,
+                      ),
+                      onChanged: (String? newValue) {
+                        // Qo'shimcha funksiya qo'shing
+                      },
+                      items: <String>['Sort by', 'Price', 'Rating', 'Newest']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
                     ),
-                    Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.black45,
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 50,
-                  crossAxisSpacing: 15,
-                  childAspectRatio: 3 / 3,
-                ),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Container(
+            child: GridView.builder(
+              padding: const EdgeInsets.only(
+                top: 60,
+                left: 20,
+                right: 20,
+                bottom: 10,
+              ),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 50,
+                crossAxisSpacing: 15,
+                childAspectRatio: 3 / 3,
+              ),
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                      return ProductsDataScreen(
+                        product: products[index],
+                      );
+                    }));
+                  },
+                  child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.shade200,
+                      color: Colors.grey.shade100,
                     ),
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
                         Positioned(
-                          top: -50,
-                          left: -18,
+                          top: getPositionTop(index),
+                          left: getPositionLeft(index),
                           child: Image.asset(
-                            "assets/images/lamp.png",
-                            height: 100,
+                            products[index]['image'],
+                            height: getImageHeight(index),
                           ),
                         ),
                         const Align(
@@ -157,7 +280,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const Positioned(
                           top: 74,
-                          child: const Text("Lamp"),
+                          child: Text(
+                            "Lamp",
+                            style: TextStyle(color: Colors.black26),
+                          ),
                         ),
                         Align(
                           alignment: Alignment.bottomLeft,
@@ -166,17 +292,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               const Text("\$142.00"),
                               IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.favorite_outline),
+                                onPressed: () {
+                                  isFavorite[index] = !isFavorite[index];
+                                  setState(() {});
+                                },
+                                icon: Icon(
+                                  isFavorite[index]
+                                      ? Icons.favorite
+                                      : Icons.favorite_outline,
+                                  color: Colors.red,
+                                ),
                               )
                             ],
                           ),
                         )
                       ],
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ],

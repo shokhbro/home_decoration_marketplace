@@ -8,7 +8,7 @@ class CatalogContainer extends StatelessWidget {
     required this.title,
     required this.isSelected,
     Key? key,
-  }) : super(key: key);
+  }) ;
 
   @override
   Widget build(BuildContext context) {
