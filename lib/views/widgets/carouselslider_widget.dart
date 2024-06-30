@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:home_decoration_marketplace/views/screens/category_screen.dart';
 
 class carouselSliderWidget extends StatelessWidget {
   const carouselSliderWidget({super.key});
@@ -12,12 +13,18 @@ class carouselSliderWidget extends StatelessWidget {
         autoPlay: true,
       ),
       items: [
-        ["Living Room", "assets/images/living_room.png"],
-        ["Bedroom", "assets/images/bedroom.png"],
+        {"title": "Living Room", "image": "assets/images/living_room.png"},
+        {"title": "Bedroom", "image": "assets/images/bedroom.png"},
       ].map((item) {
         return Builder(builder: (BuildContext context) {
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                return CategoryScreen(
+                  category: item,
+                );
+              }));
+            },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Container(
@@ -25,7 +32,7 @@ class carouselSliderWidget extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(item[1]),
+                    image: AssetImage(item["image"]!),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -35,7 +42,7 @@ class carouselSliderWidget extends StatelessWidget {
                   color: Colors.black.withOpacity(0.4),
                   child: Center(
                     child: Text(
-                      item[0],
+                      item["title"]!,
                       style: const TextStyle(
                         fontFamily: 'Extrag',
                         fontWeight: FontWeight.bold,

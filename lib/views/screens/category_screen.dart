@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:gap/gap.dart';
 import 'package:home_decoration_marketplace/views/screens/cart_screen.dart';
 import 'package:home_decoration_marketplace/views/screens/products_data_screen.dart';
-import 'package:home_decoration_marketplace/views/widgets/carouselslider_widget.dart';
-import 'package:home_decoration_marketplace/views/widgets/catalog_container_widget.dart';
-import 'package:badges/badges.dart' as badges;
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class CategoryScreen extends StatefulWidget {
+  final Map<String, String> category;
+  const CategoryScreen({super.key, required this.category});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _CategoryScreenState extends State<CategoryScreen> {
   List<String> catalogs = [
     "Popular",
     "New",
     "Best Selling",
     "For you",
   ];
+
   int selectedIndex = 0;
   List<bool> isFavorite = List.generate(10, (_) => false);
+
   List<Map> products = [
     {
       "image": "assets/images/lamp.png",
@@ -87,7 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (index == 5) {
       return 100;
     }
-
     return 140;
   }
 
@@ -126,109 +126,57 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     int favoriteCount = isFavorite.where((element) => element).length;
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        actions: [
-          InkWell(
-            onTap: () {},
-            child: const Icon(Icons.notifications_none),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
-          ),
-          const CircleAvatar(
-            radius: 17,
-            backgroundImage: AssetImage("assets/images/person.png"),
-          ),
-          const Gap(15),
-        ],
-      ),
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-        child: DrawerHeader(
-          child: ListView.builder(
-            itemCount: 1,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  const ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/person.png"),
-                    ),
-                    title: Text("Alex Babkin"),
-                    subtitle: Text("+734632378545"),
-                  ),
-                  const Gap(20),
-                  Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.blue),
-                        ),
-                      ),
-                      const Gap(10),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.blue),
-                        ),
-                      ),
-                      const Gap(10),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.blue),
-                        ),
-                      ),
-                      const Gap(10),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.blue),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
       body: Column(
         children: [
-          const carouselSliderWidget(),
-          const Gap(30),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: catalogs.asMap().entries.map((entry) {
-                int index = entry.key;
-                String catalog = entry.value;
-                return GestureDetector(
-                  onTap: () => onCatalogTap(index),
-                  child: CatalogContainer(
-                    title: catalog,
-                    isSelected: index == selectedIndex,
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: 300,
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Image.asset(
+                        widget.category["image"].toString(),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Container(
+                      color: Colors.black.withOpacity(0.3),
+                    ),
+                    Center(
+                      child: Text(
+                        widget.category["title"].toString(),
+                        style: const TextStyle(
+                          fontFamily: 'Extrag',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 30,
+                left: 5,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                    size: 30,
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+              ),
+            ],
           ),
-          const Gap(30),
+          const Gap(20),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Row(
@@ -398,9 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   }
                   Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                    return CartScreen(
-                      favoriteProducts: favoriteProducts,
-                    );
+                    return CartScreen(favoriteProducts: favoriteProducts);
                   }));
                 },
                 child: const Icon(
