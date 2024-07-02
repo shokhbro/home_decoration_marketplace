@@ -19,6 +19,8 @@ class _ProductInformationState extends State<ProductInformation> {
   bool productColor2 = false;
   bool productColor3 = false;
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Padding(

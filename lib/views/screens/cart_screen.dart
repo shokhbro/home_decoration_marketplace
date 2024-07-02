@@ -68,8 +68,18 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  double calculateTotalPrice() {
+    double total = 0.0;
+    for (var product in widget.favoriteProducts) {
+      String priceString = product['price'].replaceAll(RegExp(r'[^0-9.]'), '');
+      total += double.parse(priceString);
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
+    double totalPrice = calculateTotalPrice();
     return Scaffold(
       appBar: AppBar(),
       body: widget.favoriteProducts.isEmpty
@@ -89,11 +99,26 @@ class _CartScreenState extends State<CartScreen> {
                           title: Text(widget.favoriteProducts[index]['title']),
                           subtitle:
                               Text(widget.favoriteProducts[index]['subtitle']),
-                          trailing:
-                              Text(widget.favoriteProducts[index]['price']),
+                          trailing: Text(
+                            widget.favoriteProducts[index]['price'],
+                            style: const TextStyle(
+                              fontFamily: 'Lato',
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       );
                     },
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "Total: \$${totalPrice.toStringAsFixed(2)}",
+                    style: const TextStyle(
+                      fontFamily: 'Lato',
+                      fontSize: 20,
+                    ),
                   ),
                 ),
                 GestureDetector(

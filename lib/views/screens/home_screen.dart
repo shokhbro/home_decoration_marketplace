@@ -5,6 +5,7 @@ import 'package:home_decoration_marketplace/views/screens/products_data_screen.d
 import 'package:home_decoration_marketplace/views/widgets/carouselslider_widget.dart';
 import 'package:home_decoration_marketplace/views/widgets/catalog_container_widget.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:home_decoration_marketplace/views/widgets/custom_drawer_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -52,17 +53,31 @@ class _HomeScreenState extends State<HomeScreen> {
       "rating": "4.2",
     },
     {
-      "image": "assets/images/painting_berry.png",
-      "title": "Painting Berry",
-      "subtitle": "Paint",
-      "price": "\$74.00",
+      "image": "assets/images/skulptura.png",
+      "title": "Skulptura",
+      "subtitle": "Skul",
+      "price": "\$123.00",
       "rating": "4.2",
     },
     {
-      "image": "assets/images/painting_berry.png",
-      "title": "Painting Berry",
-      "subtitle": "Paint",
+      "image": "assets/images/chair.png",
+      "title": "Chair",
+      "subtitle": "work",
       "price": "\$210.00",
+      "rating": "4.2",
+    },
+    {
+      "image": "assets/images/desk.png",
+      "title": "Desk",
+      "subtitle": "work",
+      "price": "\$361.00",
+      "rating": "4.2",
+    },
+    {
+      "image": "assets/images/book.png",
+      "title": "Book",
+      "subtitle": "read",
+      "price": "\$41.00",
       "rating": "4.2",
     },
   ];
@@ -86,6 +101,10 @@ class _HomeScreenState extends State<HomeScreen> {
       return 100;
     } else if (index == 5) {
       return 100;
+    } else if (index == 6) {
+      return 85;
+    } else if (index == 7) {
+      return 100;
     }
 
     return 140;
@@ -104,6 +123,10 @@ class _HomeScreenState extends State<HomeScreen> {
       return -50;
     } else if (index == 5) {
       return -50;
+    } else if (index == 6) {
+      return -50;
+    } else if (index == 7) {
+      return -50;
     }
     return -60;
   }
@@ -118,7 +141,11 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (index == 4) {
       return -30;
     } else if (index == 5) {
-      return -30;
+      return -20;
+    } else if (index == 6) {
+      return -10;
+    } else if (index == 7) {
+      return -20;
     }
     return -40;
   }
@@ -126,7 +153,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     int favoriteCount = isFavorite.where((element) => element).length;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -147,66 +173,9 @@ class _HomeScreenState extends State<HomeScreen> {
           const Gap(15),
         ],
       ),
-      drawer: Drawer(
+      drawer: const Drawer(
         backgroundColor: Colors.white,
-        child: DrawerHeader(
-          child: ListView.builder(
-            itemCount: 1,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  const ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/person.png"),
-                    ),
-                    title: Text("Alex Babkin"),
-                    subtitle: Text("+734632378545"),
-                  ),
-                  const Gap(20),
-                  Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.blue),
-                        ),
-                      ),
-                      const Gap(10),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.blue),
-                        ),
-                      ),
-                      const Gap(10),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.blue),
-                        ),
-                      ),
-                      const Gap(10),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.blue),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
+        child: CustomDrawerWidget(),
       ),
       body: Column(
         children: [

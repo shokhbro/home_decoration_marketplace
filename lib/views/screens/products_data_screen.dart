@@ -32,6 +32,10 @@ class _ProductsDataScreenState extends State<ProductsDataScreen> {
       return -10;
     } else if (index == 5) {
       return -10;
+    } else if (index == 6) {
+      return 5;
+    } else if (index == 7) {
+      return 5;
     }
     return -60;
   }
@@ -49,8 +53,31 @@ class _ProductsDataScreenState extends State<ProductsDataScreen> {
       return -0;
     } else if (index == 5) {
       return -0;
+    } else if (index == 6) {
+      return 25;
+    } else if (index == 7) {
+      return 30;
     }
     return -60;
+  }
+
+  double getPositionLeft(int index) {
+    if (index == 2) {
+      return -10;
+    } else if (index == 3) {
+      return -30;
+    } else if (index == 1) {
+      return -30;
+    } else if (index == 4) {
+      return -30;
+    } else if (index == 5) {
+      return -20;
+    } else if (index == 6) {
+      return 10;
+    } else if (index == 7) {
+      return 5;
+    }
+    return -40;
   }
 
   @override
@@ -86,7 +113,7 @@ class _ProductsDataScreenState extends State<ProductsDataScreen> {
               clipBehavior: Clip.none,
               children: [
                 Positioned(
-                  left: 0,
+                  left: getPositionLeft(widget.index),
                   top: getPositionTop(widget.index),
                   bottom: getPositionBottom(widget.index),
                   child: Image.asset(

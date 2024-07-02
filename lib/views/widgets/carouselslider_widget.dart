@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:home_decoration_marketplace/views/screens/category_screen.dart';
 
+// ignore: camel_case_types
 class carouselSliderWidget extends StatelessWidget {
   const carouselSliderWidget({super.key});
 
@@ -15,6 +16,7 @@ class carouselSliderWidget extends StatelessWidget {
       items: [
         {"title": "Living Room", "image": "assets/images/living_room.png"},
         {"title": "Bedroom", "image": "assets/images/bedroom.png"},
+        {"title": "Kitchen Room", "image": "assets/images/kitchen_room.png"},
       ].map((item) {
         return Builder(builder: (BuildContext context) {
           return GestureDetector(
