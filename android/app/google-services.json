@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1067460171581",
+    "project_id": "products-d99ea",
+    "storage_bucket": "products-d99ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067460171581:android:990b579d2fa7d7fd7f1754",
+        "android_client_info": {
+          "package_name": "com.example.home_decoration_mark"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJGv08e1-kWC_47c7fWbt5_fhPGDUTKKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067460171581:android:8ab5c72f0dfc49b97f1754",
+        "android_client_info": {
+          "package_name": "com.example.home_decoration_marketplace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJGv08e1-kWC_47c7fWbt5_fhPGDUTKKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

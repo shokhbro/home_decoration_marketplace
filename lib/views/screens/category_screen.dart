@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:gap/gap.dart';
+import 'package:home_decoration_marketplace/controllers/product_controller.dart';
 import 'package:home_decoration_marketplace/views/screens/cart_screen.dart';
 import 'package:home_decoration_marketplace/views/screens/products_data_screen.dart';
 
@@ -13,6 +14,8 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  final productController = ProductController();
+
   List<String> catalogs = [
     "Popular",
     "New",

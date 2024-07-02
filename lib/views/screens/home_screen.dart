@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:home_decoration_marketplace/controllers/product_controller.dart';
+import 'package:home_decoration_marketplace/services/products_firebase_services.dart';
 import 'package:home_decoration_marketplace/views/screens/cart_screen.dart';
 import 'package:home_decoration_marketplace/views/screens/products_data_screen.dart';
 import 'package:home_decoration_marketplace/views/widgets/carouselslider_widget.dart';
@@ -15,6 +18,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _productsFirebaseServices = ProductsFirebaseServices();
+  final productConroller = ProductController();
+
   List<String> catalogs = [
     "Popular",
     "New",
@@ -23,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   int selectedIndex = 0;
   List<bool> isFavorite = List.generate(10, (_) => false);
-  List<Map> products = [
+  List<Map<String, dynamic>> products = [
     {
       "image": "assets/images/lamp.png",
       "title": "Table Desk Lamp",
@@ -132,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   double getPositionLeft(int index) {
-    if (index == 2) {
+    if (index == 7) {
       return -10;
     } else if (index == 3) {
       return -30;
@@ -144,11 +150,17 @@ class _HomeScreenState extends State<HomeScreen> {
       return -20;
     } else if (index == 6) {
       return -10;
-    } else if (index == 7) {
+    } else if (index == 2) {
       return -20;
     }
     return -40;
   }
+
+  // void uploudProductsToFirebase() {
+  //   for (var product in products) {
+  //     _productsFirebaseServices.addProduct(product);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -252,101 +264,120 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.only(
-                top: 80,
-                left: 20,
-                right: 20,
-                bottom: 10,
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 50,
-                crossAxisSpacing: 15,
-                childAspectRatio: 3 / 3,
-              ),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                      return ProductsDataScreen(
-                        product: products[index],
-                        index: index,
-                      );
-                    }));
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.shade100,
+            child: StreamBuilder(
+                stream: _productsFirebaseServices.getProducts(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return const Center(child: Text('Error loading products'));
+                  } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('No products available'));
+                  }
+
+                  List<DocumentSnapshot> products = snapshot.data!.docs;
+
+                  return GridView.builder(
+                    padding: const EdgeInsets.only(
+                      top: 80,
+                      left: 20,
+                      right: 20,
+                      bottom: 10,
                     ),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Positioned(
-                          top: getPositionTop(index),
-                          left: getPositionLeft(index),
-                          child: Image.asset(
-                            products[index]['image'],
-                            height: getImageHeight(index),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 50,
+                      crossAxisSpacing: 15,
+                      childAspectRatio: 3 / 3,
+                    ),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      var product = products[index];
+                      var data = product.data() as Map<String, dynamic>;
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (ctx) {
+                            return ProductsDataScreen(
+                              product: data,
+                              index: index,
+                            );
+                          }));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey.shade100,
                           ),
-                        ),
-                        const Align(
-                          alignment: Alignment.topRight,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                          child: Stack(
+                            clipBehavior: Clip.none,
                             children: [
-                              Icon(
-                                Icons.star,
-                                color: Colors.amber,
+                              Positioned(
+                                top: getPositionTop(index),
+                                left: getPositionLeft(index),
+                                child: Image.asset(
+                                  data['image'],
+                                  height: getImageHeight(index),
+                                ),
                               ),
-                              Text(
-                                "(5.0)",
-                                style: TextStyle(color: Colors.amber),
-                              )
-                            ],
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(products[index]['title']),
-                        ),
-                        Positioned(
-                          top: 74,
-                          child: Text(
-                            products[index]['subtitle'],
-                            style: const TextStyle(color: Colors.black26),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(products[index]['price']),
-                              IconButton(
-                                onPressed: () {
-                                  isFavorite[index] = !isFavorite[index];
-                                  setState(() {});
-                                },
-                                icon: Icon(
-                                  isFavorite[index]
-                                      ? Icons.favorite
-                                      : Icons.favorite_outline,
-                                  color: Colors.red,
+                              const Align(
+                                alignment: Alignment.topRight,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    Text(
+                                      "(5.0)",
+                                      style: TextStyle(color: Colors.amber),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(data['title']),
+                              ),
+                              Positioned(
+                                top: 74,
+                                child: Text(
+                                  data['subtitle'],
+                                  style: const TextStyle(color: Colors.black26),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(data['price']),
+                                    IconButton(
+                                      onPressed: () {
+                                        isFavorite[index] = !isFavorite[index];
+                                        setState(() {});
+                                      },
+                                      icon: Icon(
+                                        isFavorite[index]
+                                            ? Icons.favorite
+                                            : Icons.favorite_outline,
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  ],
                                 ),
                               )
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                        ),
+                      );
+                    },
+                  );
+                }),
           ),
         ],
       ),
